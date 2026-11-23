@@ -1,4 +1,4 @@
-# ProxyInject —— macOS App 代理注入技能文档
+# Antigravity Proxy Inject —— macOS Antigravity 本地代理注入技能文档
 
 > **本文档是给 AI Agent 的执行手册。**
 > Agent 收到本文档后，应按照「执行流程」中的步骤，逐条执行命令、核对每步的预期结果，遇到失败按对应「失败处理」执行，最后完成「验收标准」自检。

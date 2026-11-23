@@ -1,8 +1,8 @@
-# ProxyInject
+# Antigravity Proxy Inject
 
 [English](./README.md)
 
-给 macOS 上的 **Antigravity** 一键注入本地代理的**AI 可执行技能文档**。
+让 macOS 上的 **Antigravity**（Google AI IDE）走本地代理（Clash 等）的**AI 可执行技能文档**——一份文档，全程自动，无需手动脚本。
 
 把本文档喂给你的 AI Agent，它就能自动完成目标 App 的代理环境变量注入、签名修复、启动验证全流程——无需手动写脚本、无需每次重复操作。
 
@@ -36,7 +36,7 @@ macOS 上 Antigravity 的后台服务（`language_server`）是 Go 进程，**�
 ## 目录结构
 
 ```
-ProxyInject/
+antigravity-proxy-inject/
 ├── README.md                    # 英文说明（项目主入口）
 ├── README.zh-CN.md              # 本文件（中文说明）
 ├── LICENSE                      # MIT 开源协议

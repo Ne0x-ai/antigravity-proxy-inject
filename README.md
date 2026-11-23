@@ -1,10 +1,10 @@
-# ProxyInject
+# Antigravity Proxy Inject
 
 [中文版](./README.zh-CN.md)
 
-An **AI-executable skill document** that injects a local proxy into **Antigravity** on macOS — with one command.
+An **AI-executable skill document** that routes **Antigravity** (Google's AI IDE) through your local proxy (Clash, etc.) on macOS — one document, zero manual setup.
 
-Feed the document to your AI Agent, and it will automatically handle the entire workflow: proxy environment variable injection into the target app, code-signing repair, and launch verification — no manual scripts, no repeated setup.
+Feed the document to your AI Agent, and it will automatically handle the entire workflow: proxy environment variable injection into the app, code-signing repair, and launch verification — no manual scripts, no repeated setup.
 
 ## The Problem
 
@@ -38,7 +38,7 @@ Relies on macOS-specific mechanisms: `LSEnvironment`, `.app` bundles, `codesign`
 ## Repository Structure
 
 ```
-ProxyInject/
+antigravity-proxy-inject/
 ├── README.md                    # This file (English)
 ├── README.zh-CN.md              # Chinese README
 ├── LICENSE                      # MIT License
