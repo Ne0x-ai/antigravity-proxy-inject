@@ -12,7 +12,7 @@ macOS 上部分 AI 编程工具（Antigravity、Claude 等）的后台服务（�
 
 常规做法是写一个 `.command` 脚本，启动前手动执行。本技能的目标是：**直接修改目标 App 的 `Info.plist`，把代理环境变量写入 `LSEnvironment` 键**，利用 macOS 官方机制——GUI 启动（Dock、调度台、`open` 命令、双击）时由 launchd 自动注入进程环境——实现「任意方式打开 App 都自动走代理」，无需脚本、无需每次手动操作。
 
-**适用对象**：macOS 上需要走本地代理的 AI 编程工具 App（Antigravity、Claude 等 Electron/原生应用）。本文档以 Antigravity 为主示例，其他 App 按「通用化」一节调整即可。
+**适用对象**：macOS 上需要走本地代理的 Antigravity（Electron 应用）。其他标准 `.app` bundle 的 App 可按「通用化」一节延伸适配。
 
 ---
 
@@ -31,7 +31,7 @@ ls -la "/Applications/Antigravity.app/Contents/Info.plist"
 
 ### 检查 2：代理端口是否连通
 
-默认代理地址为 `http://127.0.0.1:7892`（用户本地代理软件的端口，如 Clash 等常见工具，具体以实际代理软件为准）。**先探测代理是否可用**，不通则后续注入无意义。
+默认代理地址为 `http://127.0.0.1:7892`（用户本地代理软件的端口，如 Clash 等常见工具，具体以实际代理软件为准）。**执行前先向用户确认实际代理端口**——若用户端口与默认不同，先把本文档所有命令中的代理地址替换为实际地址，再开始探测。**先探测代理是否可用**，不通则后续注入无意义。
 
 ```bash
 curl -s -o /dev/null -w "%{http_code}" --max-time 5 -x http://127.0.0.1:7892 https://www.gstatic.com/generate_204
@@ -43,7 +43,7 @@ curl -s -o /dev/null -w "%{http_code}" --max-time 5 -x http://127.0.0.1:7892 htt
 ### 检查 3：当前是否有目标 App 在运行
 
 ```bash
-pgrep -fl "Antigravity"
+pgrep -fl "Antigravity.app"
 ```
 
 - **预期**：无输出，或仅用户主动保留的进程。
@@ -57,14 +57,14 @@ pgrep -fl "Antigravity"
 
 ### 步骤 1：备份 Info.plist
 
-**做什么**：修改前先备份，作为回滚依据。
+**做什么**：修改前先备份，作为回滚依据。备份存放在用户主目录的隐藏文件，避免放桌面被误清理，也避免部分 Agent 沙箱无桌面写权限导致中断。
 
 ```bash
-cp "/Applications/Antigravity.app/Contents/Info.plist" "/Users/$(whoami)/Desktop/antigravity-Info.plist.bak"
+cp "/Applications/Antigravity.app/Contents/Info.plist" "$HOME/.antigravity-Info.plist.bak"
 ```
 
 - **预期**：备份文件生成成功。
-- **验证**：`ls -la` 备份文件，确认存在且大小与原文件一致。
+- **验证**：`ls -la "$HOME/.antigravity-Info.plist.bak"`，确认存在且大小与原文件一致。
 - **失败处理**：备份失败（如权限不足），立即停止，不要继续修改。
 
 ### 步骤 2：注入代理环境变量到 LSEnvironment
@@ -199,7 +199,7 @@ ps eww -p "$LS_PID" | tr ' ' '\n' | grep -i proxy
 
 ```bash
 # 1. 用备份覆盖回原 Info.plist
-cp "/Users/$(whoami)/Desktop/antigravity-Info.plist.bak" "/Applications/Antigravity.app/Contents/Info.plist"
+cp "$HOME/.antigravity-Info.plist.bak" "/Applications/Antigravity.app/Contents/Info.plist"
 
 # 2. 清理隔离属性
 xattr -cr "/Applications/Antigravity.app"
